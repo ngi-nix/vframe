@@ -6,34 +6,31 @@
 
   outputs = { self, nixpkgs }: {
 
-    packages.x86_64-linux.vframe =
+    defaultPackage.x86_64-linux =
+      with import nixpkgs { system = "x86_64-linux"; };
       let
-        buildVframeApp = { lib, pkgs, buildPythonApplication }:
+        pythonEnv = python38.withPackages (ps: [
+          ps.numpy
+          ps.toolz
+        ]);
+      in mkShell {
+        packages = [
+          pythonEnv
 
-          buildPythonApplication rec {
-            pname = "vframe";
-            version = "0";
-
-            src = ./.;
-
-            proparagedBuildInputs = [
-              pkgs.opencv
-            ];
-
-            meta = with lib; {
-              homepage = "https://github.com/ngi-nix/vframe";
-              description = "VFRAME: Visual Forensics, Redaction, and Metadata Extraction application";
-              licence = licenses.mit;
-            };
-          };
-        pkgs = import nixpkgs { system = "x86_64-linux"; };
-      in
-      pkgs.callPackage buildVframeApp {
-        buildPythonApplication = pkgs.python38Packages.buildPythonPackage;
+          conda
+          opencv
+        ];
       };
-
-
-    defaultPackage.x86_64-linux = self.packages.x86_64-linux.vframe;
+      # stdenv.mkDerivation {
+      #   name = "test";
+      #   src = self;
+      #   buildPhase = "";
+      #   installPhase = "mkdir -p $out/bin; cp -r . $out/";
+      #   propagatedDependencies = [
+      #     pkgs.opencv
+      #     pkgs.conda
+      #   ];
+      # };
 
   };
 }
