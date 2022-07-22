@@ -16,6 +16,7 @@ data/media/output/*
 data/incoming/*
 data/test/*
 data/reports/*
+.direnv/*
 
 # Don't ignore
 !vframe_cli/plugins/.gitkeep
@@ -162,4 +163,3 @@ static/public/user_content
 .DS_Store
 
 .vframe_search.json
-

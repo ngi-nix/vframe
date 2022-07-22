@@ -92,7 +92,7 @@ def cli(ctx, opt_pipe=True):
 
 
 # def process_commands(processors, opt_pipe):
-@cli.resultcallback()
+@cli.result_callback()
 def process_commands(processors):
   """This result callback is invoked with an iterable of all the chained
   subcommands. As in this example each subcommand returns a function

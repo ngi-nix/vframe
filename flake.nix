@@ -1,39 +1,31 @@
 {
-  description = "VFRAME: Visual Forensics, Redaction, and Metadata Extraction application";
+  description =
+    "VFRAME: Visual Forensics, Redaction, and Metadata Extraction application";
 
-  # Nixpkgs / NixOS version to use.
-  inputs.nixpkgs.url = "nixpkgs/nixos-21.05";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  inputs.poetry2nix.url = "github:nix-community/poetry2nix";
 
-  outputs = { self, nixpkgs }: {
-
-    packages.x86_64-linux.vframe =
-      let
-        buildVframeApp = { lib, pkgs, buildPythonApplication }:
-
-          buildPythonApplication rec {
-            pname = "vframe";
-            version = "0";
-
-            src = ./.;
-
-            proparagedBuildInputs = [
-              pkgs.opencv
-            ];
-
-            meta = with lib; {
-              homepage = "https://github.com/ngi-nix/vframe";
-              description = "VFRAME: Visual Forensics, Redaction, and Metadata Extraction application";
-              licence = licenses.mit;
-            };
-          };
-        pkgs = import nixpkgs { system = "x86_64-linux"; };
-      in
-      pkgs.callPackage buildVframeApp {
-        buildPythonApplication = pkgs.python38Packages.buildPythonPackage;
-      };
-
-
-    defaultPackage.x86_64-linux = self.packages.x86_64-linux.vframe;
-
+  outputs = { self, nixpkgs, poetry2nix }: rec {
+    system = "x86_64-linux";
+    overlay = nixpkgs.lib.composeManyExtensions [
+      poetry2nix.overlay
+      (final: prev: {
+        vframe-app = prev.poetry2nix.mkPoetryApplication {
+          projectDir = ./.;
+          python = prev.pkgs.python39;
+        };
+        vframe-env = prev.poetry2nix.mkPoetryEnv {
+          projectDir = ./.;
+          python = prev.pkgs.python39;
+        };
+      })
+    ];
+    pkgs = import nixpkgs {
+      inherit system;
+      overlays = [ overlay ];
+    };
+    devShells.${system}.default = pkgs.vframe-env.env.overrideAttrs (old: {
+      buildInputs = with pkgs; [ python39Packages.poetry opencv ];
+    });
   };
 }
