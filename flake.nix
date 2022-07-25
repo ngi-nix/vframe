@@ -27,5 +27,10 @@
     devShells.${system}.default = pkgs.vframe-env.env.overrideAttrs (old: {
       buildInputs = with pkgs; [ python39Packages.poetry opencv ];
     });
+    apps.${system}.vf = {
+      type = "app";
+      program = "${pkgs.vframe-app}/bin/vframe";
+    };
+    defaultApp.${system} = pkgs.vframe-app;
   };
 }

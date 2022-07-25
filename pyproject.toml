@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 license = "MIT license"
+include = ["config.yaml", "modelzoo/vframe.yaml", "modelzoo/models/pytorch/detection/coco/coco_l6.pt", "modelzoo/models/pytorch/detection/coco/labels.txt"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -31,7 +32,7 @@ psutil = "^5.9.1"
 ipython = "^8.4.0"
 
 [tool.poetry.scripts]
-cli = "src.cli:cli"
+vframe = "vframe.cli:cli"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

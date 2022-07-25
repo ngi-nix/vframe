@@ -3,27 +3,42 @@
 VFRAME is a computer vision framework designed for analyzing large media archives of images and videos. It includes a ModelZoo and a customizable plugin architecture to develop custom CLI tools. VFRAME is still under development and code is subject to major changes.
 
 
-## Setup Conda or pip Environment
+## Setup Nix Environment
+
+### Install Nix
+
+#### Multi User Installation
+```bash
+sh <(curl -L https://nixos.org/nix/install) --daemon
+```
+#### Single User Installation
+```bash
+$ sh <(curl -L https://nixos.org/nix/install) --no-daemon
+```
+
+#### Enable Flakes Support
+
+Edit either `~/.config/nix/nix.conf` or `/etc/nix/nix.conf` and add:
 
 ```
+experimental-features = nix-command flakes
+```
+
+If you installed the multi user installation don't forget to restart the nix-daemon.
+
+For more info about flakes and their usage refer to the [NixOS Flakes](https://nixos.wiki/wiki/Flakes) docs.
+
+## Run VFRAME
+
+With nix installed and flakes enabled you can run VFRAME with the following commands.
+```bash
 # Clone this repo
-git clone https://github.com/vframeio/vframe
+$ git clone https://github.com/vframeio/vframe
 
-# Create Conda environment
-conda env create -f environment-linux.yml  # Linux CPU (Another step required for GPU)
-
-# Activate
-conda activate vframe
-
-# Make an alias to vframe cli (recommended)
-alias vf="python /path/to/vframe/src/cli.py
-
-# or
-cd /path/to/vframe/
-python src/cli.py
+# Run VFrame
+$ nix run vf
 ```
 
-To run the GPU-accelerated scripts on more recent GPUs (including RTX 3080 Ti or 3090) install PyTorch nightly from <https://pytorch.org/>.
 
 
 ## Test Installation
@@ -101,7 +116,7 @@ VFRAME gratefully acknowledges support  from the following organizations and gra
 
 ![](docs/assets/nlnet.jpg)
 
-VFRAME received support from the NLNet Foundation and Next Generation Internet (NGI0) supported research and development of face blurring and biometric redaction tools during 2019 - 2021. Funding was provided through the NGI0 Privacy Enhancing Technologies Fund, a fund established by NLnet with financial support from the European Commission’s Next Generation Internet program. 
+VFRAME received support from the NLNet Foundation and Next Generation Internet (NGI0) supported research and development of face blurring and biometric redaction tools during 2019 - 2021. Funding was provided through the NGI0 Privacy Enhancing Technologies Fund, a fund established by NLnet with financial support from the European Commission’s Next Generation Internet program.
 
 ![](docs/assets/spacer_white_10.png)
 
