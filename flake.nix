@@ -10,27 +10,43 @@
     overlay = nixpkgs.lib.composeManyExtensions [
       poetry2nix.overlay
       (final: prev: {
-        vframe-app = prev.poetry2nix.mkPoetryApplication {
+        app = prev.poetry2nix.mkPoetryApplication {
           projectDir = ./.;
           python = prev.pkgs.python39;
         };
-        vframe-env = prev.poetry2nix.mkPoetryEnv {
+        env = prev.poetry2nix.mkPoetryEnv {
           projectDir = ./.;
           python = prev.pkgs.python39;
         };
       })
     ];
+    pkgsUnfree = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true; # CUDA
+      overlays = [ overlay ];
+    };
     pkgs = import nixpkgs {
       inherit system;
       overlays = [ overlay ];
     };
-    devShells.${system}.default = pkgs.vframe-env.env.overrideAttrs (old: {
-      buildInputs = with pkgs; [ python39Packages.poetry opencv ];
-    });
-    apps.${system}.vf = {
-      type = "app";
-      program = "${pkgs.vframe-app}/bin/vframe";
+    devShells.${system} = {
+      default = pkgs.env.env.overrideAttrs (old: {
+        buildInputs = with pkgs; [
+          opencv
+          python39Packages.poetry
+          python39Packages.pytorchWithoutCuda
+          python39Packages.torchvision
+        ];
+      });
+      gpu = pkgs.env.env.overrideAttrs (old: {
+        buildInputs = with pkgsUnfree; [
+          cudatoolkit
+          opencv
+          python39Packages.poetry
+          python39Packages.pytorch-bin
+          python39Packages.torchvision-bin
+        ];
+      });
     };
-    defaultApp.${system} = pkgs.vframe-app;
   };
 }

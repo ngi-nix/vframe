@@ -5,6 +5,8 @@
 *_local_*
 interactives/
 notebooks/
+.envrc
+.direnv
 
 # Ignore
 3rdparty/
