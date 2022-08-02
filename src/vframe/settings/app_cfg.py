@@ -93,7 +93,7 @@ filename_accessors = {
 
 # Project directory
 FILE = Path(__file__).resolve()
-DIR_PROJECT_ROOT = FILE.parent.parent.parent  # vframe root
+DIR_PROJECT_ROOT = FILE.parent.parent.parent.parent  # vframe root
 
 # -----------------------------------------------------------------------------
 # ENV config

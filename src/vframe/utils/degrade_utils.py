@@ -74,7 +74,7 @@ class Degrade:
     return cls.blend(im, im_eq, fac)
 
   @classmethod
-  def compress(cls, im, fac, im_type='jpg'):
+   def compress(cls, im, fac, im_type='jpg'):
     """Degrade image using JPEG or WEBP compression
     :param im: numpy.ndarray BGR image
     :param fac: image compression where 1.0 maps to quality=0, 0.0 maps to quality=100
