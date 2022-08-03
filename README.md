@@ -35,8 +35,13 @@ With nix installed and flakes enabled you can run VFRAME with the following comm
 # Clone this repo
 $ git clone https://github.com/vframeio/vframe
 
-# Run VFrame
-$ nix run vf
+# Run VFrame CPU
+$ nix develop
+$ poetry vframe
+
+# Run VFrame GPU
+$ nix develop ".#gpu"
+$ poetry vframe
 ```
 
 
@@ -44,13 +49,13 @@ $ nix run vf
 ## Test Installation
 ```
 # Show list of commands
-vf
+poetry vframe
 
 # Show list of image processing commands
-vf pipe
+poetry vframe pipe
 
 # Show list of modelzoo commands
-vf modelzoo
+poetry vframe modelzoo
 ```
 
 
@@ -58,14 +63,14 @@ vf modelzoo
 ## ModelZoo
 ```
 # List of modelzoo commands
-vf modelzoo list
+poetry vframe modelzoo list
 
 # Download a test model
-vf modelzoo download -m coco
+poetry vframe modelzoo download -m coco
 
 # Speed test model for 20 iterations
-vf modelzoo benchmark -m coco --iters 20 --device -1  # use CPU
-vf modelzoo benchmark -m coco --iters 20 --device 0 # use GPU 0, 1, etc...
+poetry vframe modelzoo test -m coco --iters 20 --device -1  # use CPU
+poetry vframe modelzoo benchmark -m coco --iters 20 --device 0 # use GPU 0, 1, etc...
 ```
 
 Read more about the [ModelZoo](docs/modelzoo.md)
@@ -75,7 +80,7 @@ Read more about the [ModelZoo](docs/modelzoo.md)
 ## Detect Objects
 ```
 # detect objects using COCO model (replace "image.jpg" with your image)
-vf pipe open -i image.jpg detect -m coco draw display
+poetry vframe pipe open -i image.jpg detect -m coco draw display
 ```
 
 Read more about [object detection](docs/object-detection.md) and the [ModelZoo](docs/modelzoo.md)
@@ -85,7 +90,7 @@ Read more about [object detection](docs/object-detection.md) and the [ModelZoo](
 ## Redacting (Blurring) Faces
 ```
 # Detect and blur faces in directory of images
-vf pipe open -i input/ detect -m yoloface redact save-images -o output/
+poetry vframe pipe open -i input/ detect -m yoloface redact save-images -o output/
 ```
 
 Read more about [redaction](docs/redaction.md)
@@ -96,7 +101,7 @@ Read more about [redaction](docs/redaction.md)
 
 Convert a directory of images or video to JSON summary of detections
 ```
-vf pipe open -i $d detect save-json -o output/
+poetry vframe pipe open -i $d detect save-json -o output/
 ```
 
 
